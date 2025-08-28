@@ -1,7 +1,7 @@
 export async function POST(request) {
   try {
     const payload = await request.json()
-    const response = await fetch('http://localhost:5000/api/predict', {
+    const response = await fetch('https://algerian-forest-fire-prediction-3cpe.onrender.com/api/predict', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
