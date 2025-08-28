@@ -6,7 +6,16 @@ export async function POST(request) {
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     })
-    const data = await response.json()
+
+    // Check if response has content
+    const text = await response.text()
+    let data
+    try {
+      data = text ? JSON.parse(text) : {}
+    } catch (e) {
+      data = { error: 'Invalid JSON response from backend.' }
+    }
+
     return new Response(JSON.stringify(data), {
       status: response.status,
       headers: { 'Content-Type': 'application/json' }
