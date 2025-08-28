@@ -21,13 +21,22 @@ export default function Form() {
     setError(null)
     setLoading(true)
     try {
-      const res = await fetch('/api/predict', {
+      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || ''
+      const url = apiBase ? `${apiBase.replace(/\/$/, '')}/api/predict` : '/api/predict'
+      const res = await fetch(url, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
       })
-      const data = await res.json()
-      if (!res.ok) throw new Error(data.error || 'Request failed')
+      const text = await res.text()
+      let data = {}
+      try {
+        data = text ? JSON.parse(text) : {}
+      } catch (parseErr) {
+        // Non-JSON response (e.g., HTML from a 404 on static deploy)
+        data = { error: 'Received non-JSON response from server.' }
+      }
+      if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`)
       setResult(data.result)
       addPrediction(form, data.result)
       setOpen(true)
