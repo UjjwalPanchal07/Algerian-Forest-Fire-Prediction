@@ -1,7 +1,9 @@
 export async function POST(request) {
   try {
     const payload = await request.json()
-    const response = await fetch('https://algerian-forest-fire-prediction-3cpe.onrender.com/api/predict', {
+    const base = (typeof process !== 'undefined' && process.env && process.env.NEXT_PUBLIC_API_BASE_URL) ? process.env.NEXT_PUBLIC_API_BASE_URL : 'https://algerian-forest-fire-prediction-3cpe.onrender.com'
+    const url = `${base.replace(/\/$/, '')}/api/predict`
+    const response = await fetch(url, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)

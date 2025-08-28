@@ -13,7 +13,8 @@ STATIC_REACT_DIR = os.path.normpath(os.path.join(BASE_DIR, '..', 'Frontend', 'st
 
 application = Flask(__name__, template_folder=TEMPLATE_FOLDER)
 app = application
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+CORS(app, resources={r"/api/*": {"origins": "*"}}, supports_credentials=False)
 
 # Use default Jinja loader; React SPA is served from static build when present
 
@@ -65,6 +66,18 @@ def api_predict():
         return jsonify({"result": float(result[0])})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
+
+# Ensure CORS headers on all responses and handle preflight
+@app.after_request
+def add_cors_headers(response):
+    response.headers['Access-Control-Allow-Origin'] = '*'
+    response.headers['Access-Control-Allow-Headers'] = 'Content-Type, Authorization'
+    response.headers['Access-Control-Allow-Methods'] = 'GET, POST, OPTIONS'
+    return response
+
+@app.route('/api/predict', methods=['OPTIONS'])
+def api_predict_options():
+    return ('', 204)
 
 if __name__=="__main__":
     app.run(host="0.0.0.0")
