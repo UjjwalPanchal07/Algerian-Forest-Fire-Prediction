@@ -16,45 +16,51 @@ export default function Form() {
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value })
 
   const onSubmit = async (e) => {
-    e.preventDefault()
-    setResult(null)
-    setError(null)
-    setLoading(true)
+    e.preventDefault();
+    setLoading(true);
+    setError(null);
+
     try {
-      const apiBase = process.env.NEXT_PUBLIC_API_BASE_URL || ''
-      const url = apiBase ? `${apiBase.replace(/\/$/, '')}/api/predict` : '/api/predict'
-      const res = await fetch(url, {
+      // Always use the API route, let next.config.mjs handle rewrites
+      const res = await fetch('/api/predict', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(form)
-      })
-      const text = await res.text()
-      let data = {}
+      });
+
+      // Parse response safely
+      const text = await res.text();
+      let data = {};
       try {
-        data = text ? JSON.parse(text) : {}
-      } catch (parseErr) {
-        // Non-JSON response (e.g., HTML from a 404 on static deploy)
-        data = { error: 'Received non-JSON response from server.' }
+        data = text ? JSON.parse(text) : {};
+      } catch {
+        setError('Received non-JSON response from server.');
+        setLoading(false);
+        return;
       }
-      if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`)
-      // setResult(data.result)
-      // addPrediction(form, data.result)
-      // setOpen(true)
-            if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`)
-      
-      // Validate result before using
-      const prediction = Number(data.result)
-      console.log(data.result)
+
+      // Handle HTTP errors and backend errors
+      if (!res.ok || data.error) {
+        setError(data.error || `Request failed (${res.status})`);
+        setLoading(false);
+        return;
+      }
+
+      // Validate prediction result
+      const prediction = Number(data.result);
       if (!isFinite(prediction)) {
-        throw new Error('Prediction result is not a valid number.')
+        setError('Prediction result is not a valid number.');
+        setLoading(false);
+        return;
       }
-      setResult(prediction)
-      addPrediction(form, prediction)
-      setOpen(true)
+
+      setResult(prediction);
+      addPrediction(form, prediction);
+      setOpen(true);
     } catch (err) {
-      setError(err.message)
+      setError('Network or server error.');
     } finally {
-      setLoading(false)
+      setLoading(false);
     }
   }
 
