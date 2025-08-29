@@ -1,15 +1,14 @@
-import Form from '../Components/Form'
+"use client";
+import Form from "@/Components/Form.jsx";
+import Navigation from "@/Components/Navigation.jsx";
 
-export default function HomePage() {
+function Page() {
   return (
-    <main>
-      <section className="card" style={{ maxWidth: 960, margin: '24px auto' }}>
-        <h1>FWI Prediction</h1>
-        <p style={{ color: '#9ca3af', marginBottom: 12 }}>Enter environmental parameters to estimate the Fire Weather Index.</p>
-        <Form />
-      </section>
-    </main>
-  )
+    <div>
+      <Navigation />
+      <Form />
+    </div>
+  );
 }
 
-
+export default Page;

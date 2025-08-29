@@ -1,39 +1,119 @@
-export default function AboutPage() {
+"use client";
+import Navigation from "@/Components/Navigation.jsx";
+import Link from "next/link";
+
+function AboutPage() {
   return (
-    <main className="light-page">
-      <section className="card about-accent" style={{ maxWidth: 1040, margin: '24px auto' }}>
-        <h1>About</h1>
-        <p style={{ color: '#64748b' }}>
-          Fire Weather Index (FWI) Predictor is an ML-powered web app built with Next.js and Flask. It uses a
-          Ridge Regression model trained on the Algerian Forest Fires dataset to estimate the FWI based on
-          environmental parameters. The interface is designed for clarity and speed, with client-side validation
-          and instant results.
-        </p>
-        <div className="grid" style={{ marginTop: 12 }}>
-          <div className="card">
-            <h2>Inputs</h2>
-            <p style={{ color: '#64748b' }}>
-              Temperature (°C), Relative Humidity (%), Wind Speed (km/h), Rainfall (mm), FFMC (Fine Fuel Moisture Code),
-              DMC (Duff Moisture Code), ISI (Initial Spread Index), Classes (0 = not fire, 1 = fire), and Region
-              (Bejaia = 0, Sidi-Bel Abbes = 1).
+    <div>
+      <Navigation />
+      <div className="min-h-screen bg-gray-50 py-12 px-4 sm:px-6 lg:px-8">
+        <div className="max-w-4xl mx-auto">
+          <div className="text-center">
+            <h1 className="text-4xl font-bold text-gray-900 mb-8">
+              About Algerian Forest Fire Detection
+            </h1>
+            <p className="text-lg text-gray-600 mb-6">
+              This application uses machine learning to predict forest fire risk in Algeria
+              based on environmental factors such as temperature, humidity, and wind conditions.
             </p>
-          </div>
-          <div className="card">
-            <h2>Ranges</h2>
-            <p style={{ color: '#64748b' }}>
-              Temperature: 20–100, RH: 21–90, Ws: 6–29, Rain: 0–16.8, FFMC: 28.6–92.5, DMC: 1.1–65.9, ISI: 0–18.5.
-            </p>
-          </div>
-          <div className="card">
-            <h2>Tech Stack</h2>
-            <p style={{ color: '#64748b' }}>
-              Next.js (React), Flask API, client-side history, and a lightweight visualization.
-            </p>
+            <div className="bg-white shadow rounded-lg p-6 mt-8">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                How It Works
+              </h2>
+              <p className="text-gray-600">
+                Our Ridge Regression model analyzes historical forest fire data to identify
+                patterns and predict the likelihood of forest fires occurring in specific
+                environmental conditions.
+              </p>
+            </div>
+            
+            {/* Additional Information */}
+            <div className="bg-white shadow rounded-lg p-6 mt-6">
+              <h2 className="text-2xl font-semibold text-gray-800 mb-4">
+                Key Features
+              </h2>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4 text-left">
+                <div className="flex items-start space-x-3">
+                  <div className="text-blue-500 text-xl">🔥</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Real-time Predictions</h3>
+                    <p className="text-gray-600 text-sm">Get instant fire risk assessments</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="text-green-500 text-xl">📊</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Data Analysis</h3>
+                    <p className="text-gray-600 text-sm">Track your prediction history</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="text-purple-500 text-xl">🌍</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">Algeria Focused</h3>
+                    <p className="text-gray-600 text-sm">Specifically designed for Algerian conditions</p>
+                  </div>
+                </div>
+                <div className="flex items-start space-x-3">
+                  <div className="text-orange-500 text-xl">🤖</div>
+                  <div>
+                    <h3 className="font-semibold text-gray-800">ML Powered</h3>
+                    <p className="text-gray-600 text-sm">Advanced Ridge Regression algorithm</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+            
+            {/* Navigation Options */}
+            <div className="mt-8 space-y-4">
+              <h3 className="text-lg font-semibold text-gray-800">Ready to get started?</h3>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center">
+                <button 
+                  onClick={() => window.location.href = '/'}
+                  className="bg-green-600 hover:bg-green-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95"
+                >
+                  🚀 Make Your First Prediction
+                </button>
+                <button 
+                  onClick={() => window.location.href = '/dashboard'}
+                  className="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-medium transition-all duration-300 hover:scale-105 active:scale-95"
+                >
+                  📊 View Dashboard
+                </button>
+              </div>
+              
+              {/* Quick Links */}
+              <div className="mt-6 pt-6 border-t border-gray-200">
+                <p className="text-sm text-gray-500 mb-3">Quick Navigation:</p>
+                <div className="flex flex-wrap justify-center gap-3">
+                  <Link 
+                    href="/" 
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium hover:underline transition-colors duration-200"
+                  >
+                    ← Back to Home
+                  </Link>
+                  <span className="text-gray-400">•</span>
+                  <Link 
+                    href="/dashboard" 
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium hover:underline transition-colors duration-200"
+                  >
+                    View Dashboard
+                  </Link>
+                  <span className="text-gray-400">•</span>
+                  <Link 
+                    href="/" 
+                    className="text-blue-600 hover:text-blue-800 text-sm font-medium hover:underline transition-colors duration-200"
+                  >
+                    Make Prediction
+                  </Link>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </section>
-    </main>
-  )
+      </div>
+    </div>
+  );
 }
 
-
+export default AboutPage;
