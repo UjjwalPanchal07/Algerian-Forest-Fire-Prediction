@@ -14,7 +14,7 @@ const nextConfig = {
     return [
       {
         source: '/api/predict',
-        destination: 'http://localhost:5000/api/predict'
+        destination: 'https://algerian-forest-fire-prediction-3cpe.onrender.com/api/predict'
       }
     ]
   }
