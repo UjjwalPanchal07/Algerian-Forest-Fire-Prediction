@@ -37,8 +37,18 @@ export default function Form() {
         data = { error: 'Received non-JSON response from server.' }
       }
       if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`)
-      setResult(data.result)
-      addPrediction(form, data.result)
+      // setResult(data.result)
+      // addPrediction(form, data.result)
+      // setOpen(true)
+            if (!res.ok) throw new Error(data.error || `Request failed (${res.status})`)
+      
+      // Validate result before using
+      const prediction = Number(data.result)
+      if (!isFinite(prediction)) {
+        throw new Error('Prediction result is not a valid number.')
+      }
+      setResult(prediction)
+      addPrediction(form, prediction)
       setOpen(true)
     } catch (err) {
       setError(err.message)

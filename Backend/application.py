@@ -49,20 +49,40 @@ def predict_datapoint():
 @app.route('/api/predict', methods=['POST'])
 def api_predict():
     try:
-        data = request.get_json(force=True) or {}
-        Temperature = float(data.get('Temperature'))
-        RH = float(data.get('RH'))
-        Ws = float(data.get('Ws'))
-        Rain = float(data.get('Rain'))
-        FFMC = float(data.get('FFMC'))
-        DMC = float(data.get('DMC'))
-        ISI = float(data.get('ISI'))
-        Classes = float(data.get('Classes'))
-        region = float(data.get('region'))
+    #     data = request.get_json(force=True) or {}
+    #     Temperature = float(data.get('Temperature'))
+    #     RH = float(data.get('RH'))
+    #     Ws = float(data.get('Ws'))
+    #     Rain = float(data.get('Rain'))
+    #     FFMC = float(data.get('FFMC'))
+    #     DMC = float(data.get('DMC'))
+    #     ISI = float(data.get('ISI'))
+    #     Classes = float(data.get('Classes'))
+    #     region = float(data.get('region'))
 
-        features = [[Temperature, RH, Ws, Rain, FFMC, DMC, ISI, Classes, region]]
-        new_data_scaled = standard_scaler.transform(features)
+    #     features = [[Temperature, RH, Ws, Rain, FFMC, DMC, ISI, Classes, region]]
+    #     new_data_scaled = standard_scaler.transform(features)
+    #     result = ridge_model.predict(new_data_scaled)
+    #     return jsonify({"result": float(result[0])})
+    # except Exception as e:
+    #     return jsonify({"error": str(e)}), 400
+        data = request.get_json(force=True) or {}
+        required_fields = ['Temperature', 'RH', 'Ws', 'Rain', 'FFMC', 'DMC', 'ISI', 'Classes', 'region']
+        features = []
+        for field in required_fields:
+            value = data.get(field)
+            try:
+                value = float(value)
+                if not np.isfinite(value):
+                    raise ValueError
+            except (TypeError, ValueError):
+                return jsonify({"error": f"Missing or invalid value for '{field}'"}), 400
+            features.append(value)
+
+        new_data_scaled = standard_scaler.transform([features])
         result = ridge_model.predict(new_data_scaled)
+        if not np.isfinite(result[0]):
+            return jsonify({"error": "Prediction result is not a finite number."}), 400
         return jsonify({"result": float(result[0])})
     except Exception as e:
         return jsonify({"error": str(e)}), 400
