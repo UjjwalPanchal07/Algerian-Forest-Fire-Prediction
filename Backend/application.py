@@ -81,7 +81,7 @@ def api_predict():
 
         new_data_scaled = standard_scaler.transform([features])
         result = ridge_model.predict(new_data_scaled)
-        console.log(result[0])
+        print(result[0])
         if not np.isfinite(result[0]):
             return jsonify({"error": "Prediction result is not a finite number."}), 400
         return jsonify({"result": float(result[0])})
