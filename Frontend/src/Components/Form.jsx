@@ -44,6 +44,7 @@ export default function Form() {
       
       // Validate result before using
       const prediction = Number(data.result)
+      console.log(data.result)
       if (!isFinite(prediction)) {
         throw new Error('Prediction result is not a valid number.')
       }
